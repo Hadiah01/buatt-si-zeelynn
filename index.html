@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surat Spesial Buat Kamu 💌</title>
+    <!-- Font Kekinian dari Google -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti untuk efek kembang api -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            /* Background gradasi dinamis */
+            background: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            overflow: hidden;
+            position: relative;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Container Partikel Hujan Love */
+        #particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .heart-particle {
+            position: absolute;
+            font-size: 20px;
+            color: rgba(255, 105, 180, 0.6);
+            animation: fall linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(15px);
+            border-radius: 30px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            max-width: 450px;
+            width: 90%;
+            z-index: 10;
+            position: relative;
+            transform: scale(0.9);
+            opacity: 0;
+            animation: popUp 0.8s forwards ease-out;
+        }
+
+        @keyframes popUp {
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .step {
+            display: none;
+        }
+        .step.active {
+            display: block;
+            animation: fadeIn 0.8s;
+        }
+
+        .gif-container img {
+            width: 160px;
+            height: 160px;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            object-fit: cover;
+            /* Efek melayang (floating) pada gambar */
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Efek Ngetik (Typewriter) */
+        .typewriter-text {
+            color: #2d3436;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            min-height: 80px; 
+            line-height: 1.5;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        button {
+            padding: 12px 28px;
+            border: none;
+            border-radius: 50px;
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .btn-next, .btn-yes {
+            background: linear-gradient(135deg, #ff6b81, #ff4757);
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4);
+        }
+
+        .btn-next:hover, .btn-yes:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(255, 71, 87, 0.6);
+        }
+
+        .btn-next:active, .btn-yes:active {
+            transform: translateY(1px);
+        }
+
+        .btn-no {
+            background: #dfe6e9;
+            color: #636e72;
+            position: relative; 
+            z-index: 20;
+        }
+        
+        .btn-no:hover {
+            background: #b2bec3;
+            color: #2d3436;
+            transform: translateY(-3px) scale(1.05);
+        }
+
+        /* Amplop Awal */
+        #envelope-screen {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            transition: opacity 1s;
+        }
+        
+        .envelope-icon {
+            font-size: 80px;
+            cursor: pointer;
+            animation: wiggle 2s linear infinite;
+        }
+
+        @keyframes wiggle {
+            0%, 7% { transform: rotateZ(0); }
+            15% { transform: rotateZ(-15deg); }
+            20% { transform: rotateZ(10deg); }
+            25% { transform: rotateZ(-10deg); }
+            30% { transform: rotateZ(6deg); }
+            35% { transform: rotateZ(-4deg); }
+            40%, 100% { transform: rotateZ(0); }
+        }
+
+        #envelope-screen h3 {
+            margin-top: 20px;
+            font-weight: 400;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Musik Latar (Pastikan file mp3 ada di folder yang sama) -->
+    <audio id="bgm" src="lagunadif.mp3" loop></audio>
+
+    <!-- Partikel Hujan -->
+    <div id="particles"></div>
+
+    <!-- Layar Awal Buka Pesan -->
+    <div id="envelope-screen">
+        <div class="envelope-icon" onclick="startJourney()">💌</div>
+        <h3>Klik suratnya ya!</h3>
+    </div>
+
+    <!-- Konten Utama -->
+    <div class="card" style="display: none;" id="main-card">
+        
+        <!-- Step 1 (Intro) -->
+        <div class="step active" id="step-1">
+            <div class="gif-container">
+                <img src="jujur aja.gif" alt="Hi">
+            </div>
+            <div class="typewriter-text" id="text-1"></div>
+            <button class="btn-next" id="btn-1" style="display:none;" onclick="nextStep(1, 2, 'Jujur, ini aku buat demi kmuu, & cuma khusus buat kamuu lohh. Biasanya aku cuma ngoding buat game atau website untuk umum, tapi khusus buat kamu aku bikin yang spesial hehe.', 'Oh ya? Terus?')">okeyy</button>
+        </div>
+
+        <!-- Step 2 (Basa Basi 1) -->
+        <div class="step" id="step-2">
+            <div class="gif-container">
+                <img src="gambar2.gif" alt="Shy">
+            </div>
+            <div class="typewriter-text" id="text-2"></div>
+            <button class="btn-next" id="btn-2" style="display:none;" onclick="nextStep(2, 3, 'Awalnya aku mikir, gimana ya caranya ngomong langsung? Tapi aku takut banget kamu tolak. Padahal, aku seneng banget lho tiap ngobrol dan denger cerita dari kamu.', 'Masa sih?')">Terus?</button>
+        </div>
+
+        <!-- Step 3 (Basa Basi 2 - Bikin Baper) -->
+        <div class="step" id="step-3">
+            <div class="gif-container">
+                <img src="gambar3.gif" alt="Happy">
+            </div>
+            <div class="typewriter-text" id="text-3"></div>
+            <button class="btn-next" id="btn-3" style="display:none;" onclick="nextStep(3, 4, 'Makin ke sini, rasanya hari-hariku kurang lengkap kalau nggak ada kabar dari kamu. Kehadiran kamu itu ngasih warna tersendiri buat aku. ✨', 'Serius nih?')">Baca lagi yuk</button>
+        </div>
+
+        <!-- Step 4 (Build Up ke Nembak) -->
+        <div class="step" id="step-4">
+            <div class="gif-container">
+                <img src="gambar4.gif" alt="Nervous">
+            </div>
+            <div class="typewriter-text" id="text-4"></div>
+            <button class="btn-next" id="btn-4" style="display:none;" onclick="nextStep(4, 5, 'Makanyaa, aku nggak mau nunggu lebih lama lagii. Aku pengen kamu tau perasaanku yang sebenarnya... Jadii, aku mau kita ke hubungan yang lebih serius, & tentu aja ke hubungan yang pasti ❤️', '')">Coba klik ini...</button>
+        </div>
+
+        <!-- Step 5 (Pertanyaan Inti) -->
+        <div class="step" id="step-5">
+            <div class="gif-container">
+                <img src="gambar6.gif" alt="Love">
+            </div>
+            <div class="typewriter-text" id="text-5"></div>
+            <div class="btn-group" id="btn-group-5" style="display:none;">
+                <button class="btn-yes" onclick="successStep()">Mauu! 🥰</button>
+                <button class="btn-no" id="btn-no" onclick="rejectStep()">Gak dulu deh</button>
+            </div>
+        </div>
+
+        <!-- Step 6 (Berhasil) -->
+        <div class="step" id="step-6">
+            <div class="gif-container">
+                <img src="gambar8.gif" alt="Success">
+            </div>
+            <div class="typewriter-text" id="text-6">Yeayyy! Makasih yaa! 🫂<br></div>
+            <a href="https://wa.me/6283824063521?text=Iyaaa%20Latexx,%20aku%20mau%20kok!%20%E2%9D%A4%EF%B8%8F" style="text-decoration:none;">
+                <button class="btn-next" style="margin-top: 10px;">Chat Latexx Sekarang</button>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. Efek Hujan Partikel (Love) ---
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const hearts = ['❤️', '✨', '💖', '🌸'];
+            
+            setInterval(() => {
+                const particle = document.createElement('div');
+                particle.classList.add('heart-particle');
+                particle.innerText = hearts[Math.floor(Math.random() * hearts.length)];
+                
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.animationDuration = Math.random() * 3 + 4 + 's'; 
+                particle.style.opacity = Math.random();
+                particle.style.fontSize = Math.random() * 15 + 10 + 'px'; 
+                
+                container.appendChild(particle);
+                
+                setTimeout(() => {
+                    particle.remove();
+                }, 7000);
+            }, 300); 
+        }
+        createParticles();
+
+        // --- 2. Fungsi Mulai Buka Surat ---
+        function startJourney() {
+            let bgm = document.getElementById('bgm');
+            if (bgm) {
+                bgm.volume = 0.5; // Volume dibuat 50% biar santai
+                let playPromise = bgm.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        console.log("Autoplay dicegah browser:", error);
+                    });
+                }
+            }
+            
+            const envelope = document.getElementById('envelope-screen');
+            envelope.style.opacity = '0';
+            setTimeout(() => {
+                envelope.style.display = 'none';
+                document.getElementById('main-card').style.display = 'block';
+                typeWriter("Halo! Boleh minta waktunya sebentar nggak??", "text-1", "btn-1"); 
+            }, 1000);
+        }
+
+        // --- 3. Efek Mengetik Dinamis (Lebih Syahdu) ---
+        function typeWriter(text, elementId, btnId) {
+            let i = 0;
+            const element = document.getElementById(elementId);
+            element.innerHTML = ""; 
+            
+            if (btnId && btnId.length > 0) {
+                const btn = document.getElementById(btnId);
+                if (btn) btn.style.display = 'none';
+            }
+
+            function type() {
+                if (i < text.length) {
+                    let char = text.charAt(i);
+                    element.innerHTML += char;
+                    i++;
+                    
+                    // Kecepatan dasar mengetik (acak sedikit biar natural)
+                    let delay = 70 + Math.random() * 30; // 70-100ms per huruf
+
+                    // Kalau nemu tanda baca, berikan jeda!
+                    if (char === '.' || char === '?' || char === '!') {
+                        delay = 600; // Tahan lama dikit (tarik napas)
+                    } else if (char === ',') {
+                        delay = 350; // Tahan sebentar (jeda koma)
+                    }
+
+                    setTimeout(type, delay);
+                } else {
+                    // JEDA NAPAS 1.5 DETIK sebelum tombol muncul biar kerasa feel lagu Nadhif
+                    setTimeout(() => {
+                        if (btnId && btnId.length > 0) {
+                            const btn = document.getElementById(btnId);
+                            if (btn) {
+                                btn.style.display = 'inline-block';
+                                btn.style.animation = 'fadeIn 0.8s'; 
+                            }
+                        } else if (elementId === 'text-5') {
+                            const btnGroup = document.getElementById('btn-group-5');
+                            btnGroup.style.display = 'flex';
+                            btnGroup.style.animation = 'fadeIn 0.8s';
+                        }
+                    }, 1500); 
+                }
+            }
+            type();
+        }
+
+        // --- 4. Fungsi Lanjut ke Pesan Berikutnya ---
+        function nextStep(current, next, nextText, btnText) {
+            document.getElementById('step-' + current).classList.remove('active');
+            document.getElementById('step-' + next).classList.add('active');
+            
+            if (btnText && btnText !== '') {
+               const nextBtn = document.getElementById('btn-' + next);
+               if (nextBtn) nextBtn.innerText = btnText;
+            }
+
+            let targetBtnId = 'btn-' + next;
+            if (next === 5) targetBtnId = ""; 
+
+            typeWriter(nextText, 'text-' + next, targetBtnId);
+        }
+
+        // --- 5. Fungsi Tolak (Gak Dulu Deh) ---
+        function rejectStep() {
+            window.location.href = "https://wa.me/6283824063521?text=Maaf%20yaa%20Latexx,%20aku%20belum%20bisa%20nerima%20kamu%20%F0%9F%99%8F";
+        }
+
+        // --- 6. Step Terakhir (Kembang Api 🎉) ---
+        function successStep() {
+            document.getElementById('step-5').classList.remove('active');
+            document.getElementById('step-6').classList.add('active');
+            
+            var duration = 3 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 999 };
+
+            function randomInRange(min, max) {
+              return Math.random() * (max - min) + min;
+            }
+
+            var interval = setInterval(function() {
+              var timeLeft = animationEnd - Date.now();
+
+              if (timeLeft <= 0) {
+                return clearInterval(interval);
+              }
+
+              var particleCount = 50 * (timeLeft / duration);
+              confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+              confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+        }
+    </script>
+</body>
+</html>
